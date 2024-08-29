@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PYTHON_VERSION = '3.8'
+        PYTHON_VERSION = '/usr/bin/python3'
     }
 
     stages {
