@@ -1,0 +1,9 @@
+server:
+  ip: "34.173.53.20"
+  port: 8080
+  username: "robinmishra413"
+  password: ""
+
+
+some_other_config:
+  example_setting: "value"
