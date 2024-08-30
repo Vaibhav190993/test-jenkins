@@ -1,8 +1,4 @@
 pipeline {
-    agent {
-        label 'source-server' // Ensure this label corresponds to the Jenkins agent with IP 34.173.53.20
-    }
-
     environment {
         SSH_KEY_PATH = '/home/robinmishra413/.ssh/id_rsa'
         CLIENT_SERVER = 'robinmishra413@34.44.167.143' // Destination server with user
