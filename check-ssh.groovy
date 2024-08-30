@@ -1,4 +1,6 @@
 pipeline {
+    agent any // or specify a particular agent if needed
+
     environment {
         SSH_KEY_PATH = '/home/robinmishra413/.ssh/id_rsa'
         CLIENT_SERVER = 'robinmishra413@34.44.167.143' // Destination server with user
