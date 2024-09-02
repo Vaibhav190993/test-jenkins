@@ -1,57 +1,48 @@
 pipeline {
-    agent any
+    agent any // or specify a particular agent if needed
 
     environment {
-        LOCAL_USER = 'robinmishra413'
-        REMOTE_SERVER = '34.44.167.143' // Replace with your remote server address
-        REMOTE_USER = 'robinmishra413'
-        SSH_KEY_PATH = "/home/robinmishra413/.ssh/id_rsa.pub"
-        AUTHORIZED_KEYS_PATH = "/home/robinmishra413/.ssh/authorized_keys"
+        SSH_KEY_PATH = '/home/robinmishra413/.ssh/id_rsa' // Path to the private key
+        CLIENT_SERVER = 'robinmishra413@34.44.167.143' // Destination server with user
     }
 
     stages {
-        stage('Generate SSH Key') {
+        stage('Check and Generate SSH Key') {
             steps {
                 script {
-                    def sshKeyFile = new File(SSH_KEY_PATH)
-                    if (!sshKeyFile.exists()) {
-                        echo 'Generating SSH key...'
-                        sh "ssh-keygen -t rsa -b 2048 -f ${SSH_KEY_PATH} -N ''"
+                    // Use shell command to check if the SSH key file exists
+                    def keyExists = sh(script: "test -f ${env.SSH_KEY_PATH}", returnStatus: true) == 0
+
+                    if (keyExists) {
+                        echo "SSH key already exists at ${env.SSH_KEY_PATH}."
                     } else {
-                        echo 'SSH key already exists.'
+                        // Generate SSH key if it doesn't exist
+                        echo "SSH key not found. Generating new SSH key..."
+                        sh "ssh-keygen -t rsa -b 4096 -f ${env.SSH_KEY_PATH} -N ''"
+                        echo "SSH key generated successfully."
                     }
                 }
             }
         }
 
-        stage('Copy SSH Key to Remote Server') {
+        stage('Copy SSH Key to Destination Server') {
             steps {
                 script {
-                    def sshKey = readFile(SSH_KEY_PATH).trim()
-                    echo 'Copying SSH key to remote server...'
-                    sh """
-                        echo '${sshKey}' | ssh ${REMOTE_USER}@${REMOTE_SERVER} 'cat >> ${AUTHORIZED_KEYS_PATH}'
-                    """
-                }
-            }
-        }
-
-        stage('Configure Remote Server') {
-            steps {
-                script {
-                    echo 'Adding user and configuring sudoers on remote server...'
-                    sh """
-                        ssh ${REMOTE_USER}@${REMOTE_SERVER} 'sudo useradd ${LOCAL_USER}'
-                        echo "${LOCAL_USER}        ALL=(ALL)       NOPASSWD: ALL" | ssh ${REMOTE_USER}@${REMOTE_SERVER} 'sudo tee -a /etc/sudoers'
-                    """
+                    // Copy SSH key to the destination server
+                    echo "Copying SSH key to the destination server..."
+                    sh "ssh-copy-id -i ${env.SSH_KEY_PATH}.pub ${env.CLIENT_SERVER}"
+                    echo "SSH key copied successfully to ${env.CLIENT_SERVER}."
                 }
             }
         }
     }
 
     post {
-        always {
-            echo 'Pipeline completed.'
+        failure {
+            echo 'Pipeline failed.'
+        }
+        success {
+            echo 'Pipeline succeeded.'
         }
     }
 }
