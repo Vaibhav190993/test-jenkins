@@ -16,7 +16,7 @@ pipeline {
                     } else {
                         // Generate SSH key if it doesn't exist
                         echo "SSH key not found. Generating new SSH key..."
-                        sh "sudo ssh-keygen -t rsa -b 4096 -f ${env.SSH_KEY_PATH} -y ''"
+                        sh "ssh-keygen -t rsa -b 4096 -f ${env.SSH_KEY_PATH} -y ''"
                         echo "SSH key generated successfully."
                     }
                 }
