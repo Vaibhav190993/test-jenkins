@@ -17,7 +17,7 @@ pipeline {
         stage('Untar File') {
             steps {
                 // Run the tar command directly
-                sh "mkdir -p ${DEST_DIR} && tar -xvf ${TAR_FILE} -C ${DEST_DIR}"
+                sh "sudo mkdir -p ${DEST_DIR} && tar -xvf ${TAR_FILE} -C ${DEST_DIR}"
             }
         }
     }
