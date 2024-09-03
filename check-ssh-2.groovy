@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SSH_KEY_PATH = '/home/ec2-user/.ssh/id_rsa' // Path to the private key
-        CLIENT_SERVER = 'ec2-user@54.253.213.238' // Destination server with user
+        CLIENT_SERVER = 'ec2-user@54.66.47.15' // Destination server with user
     }
 
     stages {
