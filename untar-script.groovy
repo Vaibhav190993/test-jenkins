@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout your repository
-                git 'https://github.com/Vaibhav190993/test-jenkins.git'
+                git branch: 'main', url: 'https://github.com/Vaibhav190993/test-jenkins.git'
             }
         }
 
