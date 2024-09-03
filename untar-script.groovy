@@ -1,20 +1,30 @@
 pipeline {
     agent any
 
+    environment {
+        TAR_FILE = "fo_installer-RHEL8.6_23.0.0_FP_03_635338.tar"   // Path to your tar.gz file within the workspace
+        DEST_DIR = "/home/ec2-user"     // Directory to extract the contents
+    }
+
     stages {
-        stage('Create a File') {
+        stage('Checkout') {
             steps {
-                sh 'echo "Hello, World!" > myfile.txt'
+                // Checkout your repository
+                git branch: 'main', url: 'https://github.com/Vaibhav190993/test-jenkins.git'
             }
         }
 
-        stage('Read a File') {
+        stage('Untar File') {
             steps {
-                script {
-                    def content = readFile 'myfile.txt'
-                    echo "File content: ${content}"
-                }
+                // Run the tar command directly
+                sh "mkdir -p ${DEST_DIR} && tar -xvf ${TAR_FILE} -C ${DEST_DIR}"
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution completed.'
         }
     }
 }
