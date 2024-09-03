@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        PYTHON_VERSION = '/usr/bin/python3'
+        TAR_FILE = "fo_installer-RHEL8.6_23.0.0_FP_03_635338.tar"   // Path to the tar.gz file within the workspace
+        DEST_DIR = "/home/ec2-user"     // Directory to extract the contents
     }
 
     stages {
@@ -11,37 +12,13 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Vaibhav190993/test-jenkins.git'
             }
         }
-        stage('Verify Python Installation') {
+        stage('Untar File') {
             steps {
-                script {
-                    sh '''
-                    which python3
-                    python3 --version
-                    '''
-                }
+                // Run the tar command directly
+                sh "mkdir -p ${DEST_DIR} && tar -xvf ${TAR_FILE} -C ${DEST_DIR}"
             }
         }
-        stage('Setup') {
-            steps {
-                script {
-                    sh '''
-                    ${PYTHON_VERSION} -m venv venv
-                    . venv/bin/activate
-                    pip install -r requirements.txt
-                    '''
-                }
-            }
-        }
-        stage('Untar File using Python') {
-            steps {
-                script {
-                    sh '''
-                    . venv/bin/activate
-                    python untar_script.py
-                    '''
-                }
-            }
-        }
+
     }
 
     post {
