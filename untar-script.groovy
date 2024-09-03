@@ -37,7 +37,7 @@ pipeline {
                 script {
                     sh '''
                     . venv/bin/activate
-                    untar_script.py
+                    python untar_script.py
                     '''
                 }
             }
