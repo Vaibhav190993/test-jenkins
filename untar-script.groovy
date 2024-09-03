@@ -10,14 +10,21 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout your repository
-                git branch: 'main', url: 'https://github.com/Vaibhav190993/test-jenkins.git'
+                git 'https://github.com/Vaibhav190993/test-jenkins.git'
             }
         }
 
-        stage('Untar File') {
+        stage('Run as Root') {
             steps {
-                // Run the tar command directly
-                sh "sudo mkdir -p ${DEST_DIR} && tar -xvf ${TAR_FILE} -C ${DEST_DIR}"
+                script {
+                    // Run commands as root using sudo -i
+                    sh '''
+                        sudo -i <<EOF
+                        mkdir -p ${DEST_DIR}
+                        tar -xvf ${TAR_FILE} -C ${DEST_DIR}
+                        EOF
+                    '''
+                }
             }
         }
     }
