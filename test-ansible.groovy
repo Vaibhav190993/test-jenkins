@@ -7,29 +7,20 @@ pipeline {
     }
 
     stages {
-        stage('Login as Sudo User') {
-            steps {
-                // Login as the sudo user
-                sh '''
-                sudo -i
-                '''
-            }
-        }
-
         stage('Ansible Script: Add User to Sudoers') {
             steps {
-                // Run the Ansible command to add cloud-user to sudoers
+                // Run the Ansible command to add cloud-user to sudoers with sudo privileges
                 sh '''
-                ansible demo -m lineinfile -a "path=/etc/sudoers line='cloud-user ALL=(ALL) ALL' insertafter='^root'"
+                sudo ansible demo -m lineinfile -a "path=/etc/sudoers line='cloud-user ALL=(ALL) ALL' insertafter='^root'"
                 '''
             }
         }
 
         stage('Ansible Script: Check Security Settings') {
             steps {
-                // Run the Ansible command to set SELinux to disabled
+                // Run the Ansible command to set SELinux to disabled with sudo privileges
                 sh '''
-                ansible demo -m lineinfile -a "path=/etc/selinux/config regexp='^SELINUX=' line='SELINUX=disabled'"
+                sudo ansible demo -m lineinfile -a "path=/etc/selinux/config regexp='^SELINUX=' line='SELINUX=disabled'"
                 '''
             }
         }
