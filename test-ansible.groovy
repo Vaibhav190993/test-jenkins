@@ -7,16 +7,6 @@ pipeline {
     }
 
     stages {
-
-        stage('Login as Sudo User') {
-            steps {
-                // Login as the sudo user
-                sh '''
-                sudo -u cloud-user bash -c "echo 'Logged in as sudo user: $(whoami)'"
-                '''
-            }
-        }
-
         stage('Ansible Script: Add User to Sudoers') {
             steps {
                 // Run the Ansible command to add cloud-user to sudoers
