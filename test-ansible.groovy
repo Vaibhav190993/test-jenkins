@@ -11,7 +11,7 @@ pipeline {
             steps {
                 // Run the Ansible command to add cloud-user to sudoers with sudo privileges
                 sh '''
-                sudo ansible demo -m lineinfile -a "path=/etc/sudoers line='cloud-user ALL=(ALL) ALL' insertafter='^root'"
+                sudo ansible demo -m lineinfile -ab "path=/etc/sudoers line='cloud-user ALL=(ALL) ALL' insertafter='^root'"
                 '''
             }
         }
