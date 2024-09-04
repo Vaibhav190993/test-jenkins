@@ -11,7 +11,7 @@ pipeline {
             steps {
                 // Run the Ansible command to add cloud-user to sudoers with sudo privileges
                 sh '''
-                sudo ansible demo -m lineinfile -ab "path=/etc/sudoers line='cloud-user ALL=(ALL) ALL' insertafter='^root'"
+                ansible demo -m lineinfile -ab "path=/etc/sudoers line='cloud-user ALL=(ALL) ALL' insertafter='^root'"
                 '''
             }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 // Run the Ansible command to set SELinux to disabled with sudo privileges
                 sh '''
-                sudo ansible demo -m lineinfile -a "path=/etc/selinux/config regexp='^SELINUX=' line='SELINUX=disabled'"
+                ansible demo -m lineinfile -a "path=/etc/selinux/config regexp='^SELINUX=' line='SELINUX=disabled'"
                 '''
             }
         }
