@@ -7,6 +7,13 @@ pipeline {
     }
 
     stages {
+        stage('Login as Sudo User') {
+            steps {
+                // Login as the sudo user
+                sh '''
+                sudo -i"
+                '''
+            }
 
         stage('Ansible Script: Add User to Sudoers') {
             steps {
