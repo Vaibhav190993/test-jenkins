@@ -14,7 +14,7 @@ pipeline {
                 sudo -i"
                 '''
             }
-
+        }
         stage('Ansible Script: Add User to Sudoers') {
             steps {
                 // Run the Ansible command to add cloud-user to sudoers
