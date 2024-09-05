@@ -9,37 +9,6 @@ pipeline {
     }
 
     stages {
-        stage('check user locally') {
-            steps {
-                script {
-                    // Check the current user locally (on Jenkins)
-                    sh "whoami"
-                }
-            }
-        }
-
-        stage('SSH and Navigate') {
-            steps {
-                script {
-                    // Use SSH to connect as cloud-user to the remote server
-                    sh """
-                        ssh cloud-user@${DEPLOYMENT_HOST} 'cd /data && ls -l'
-                    """
-                }
-            }
-        }
-
-        stage('Check user remotely') {
-            steps {
-                script {
-                    // Use SSH to connect as cloud-user and check the user on the remote server
-                    sh """
-                        ssh cloud-user@${DEPLOYMENT_HOST} 'whoami'
-                    """
-                }
-            }
-        }
-
         stage('Untar File on Remote') {
             steps {
                 // Use SSH to untar the file on the remote server
