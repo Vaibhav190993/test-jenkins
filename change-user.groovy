@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        CONFIG_FILE = "/data/configurations.json"  // Path to the configuration file
-        TARGET_DIR = "/data/fo_installer"  // Target directory for moving the file
+        SOURCE_FILE = "/data/all-envs-and-hosts.yml"  // Path to the source file
+        TARGET_FILE = "/data/fo_installer/inventory/yaml/all-envs-and-hosts.yml"  // Target path for the copied file
     }
 
     stages {
         stage('Copy Configuration File') {
             steps {
-                // Copy the configuration file to the target directory locally
+                // Copy the file to the target directory
                 sh """
-                    cp ${CONFIG_FILE} ${TARGET_DIR}
+                    cp ${SOURCE_FILE} ${TARGET_FILE}
                 """
             }
         }
