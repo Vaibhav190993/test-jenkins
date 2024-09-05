@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     // Ensure sudo permissions are configured for `jenkins` to `clouduser`
-                    sh 'sudo -u clouduser whoami'
+                    sh 'sudo -u cloud-user whoami'
                 }
             }
         }
