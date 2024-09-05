@@ -42,7 +42,7 @@ pipeline {
         stage('Untar File') {
             steps {
                 // Run the tar command directly
-                sh "mkdir -p /data/ && tar -xvf ${TAR_FILE} -C /data/"
+                sh "tar -xvf ${TAR_FILE} -C /data/"
             }
         }
         stage('After Untar File check') {
