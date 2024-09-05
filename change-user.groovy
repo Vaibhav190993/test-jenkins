@@ -12,7 +12,7 @@ pipeline {
             steps {
                 // Copy the configuration file to the target directory
                 sh """
-                    scp cloud-user@${DEPLOYMENT_HOST}:${CONFIG_FILE} cloud-user@${DEPLOYMENT_HOST}:${TARGET_DIR}
+                    cp cloud-user@${DEPLOYMENT_HOST}:${CONFIG_FILE} cloud-user@${DEPLOYMENT_HOST}:${TARGET_DIR}
                 """
             }
         }
