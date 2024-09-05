@@ -12,7 +12,7 @@ pipeline {
             steps {
                 // Copy the file to the target directory
                 sh """
-                    whoami
+                    /data/fo_installer/init_deployment.sh
                 """
             }
         }
