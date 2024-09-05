@@ -2,10 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Define the SSH credentials ID that Jenkins should use
-        DEPLOYMENT_HOST = '10.92.131.112'
-        TAR_FILE = "/data/fo_installer-20.11.0_453110.tar"   // Path to the tar.gz file within the workspace
-        UNTAR_DIR = "/data" 
+        DEPLOYMENT_HOST = '10.92.131.112'  // Remote server IP
+        TAR_FILE = "/data/fo_installer-20.11.0_453110.tar"  // Path to the tar file on the remote server
+        UNTAR_DIR = "/data"  // Directory where the tar file will be extracted
     }
 
     stages {
@@ -14,6 +13,18 @@ pipeline {
                 // Use SSH to untar the file on the remote server
                 sh """
                     ssh cloud-user@${DEPLOYMENT_HOST} 'tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}'
+                """
+            }
+        }
+
+        stage('Move and Change Directory') {
+            steps {
+                // Move the tar file and change to the 'fo_installer' directory
+                sh """
+                    ssh cloud-user@${DEPLOYMENT_HOST} '
+                    mv ${TAR_FILE} ${UNTAR_DIR}/fo_installer &&
+                    cd ${UNTAR_DIR}/fo_installer
+                    '
                 """
             }
         }
