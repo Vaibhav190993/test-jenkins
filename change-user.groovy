@@ -12,7 +12,7 @@ pipeline {
             steps {
                 // Copy the file to the target directory
                 sh """
-                    ssh cloud-user@${DEPLOYMENT_HOST} '/data/fo_installer/init_deployment.sh'
+                    whoami
                 """
             }
         }
