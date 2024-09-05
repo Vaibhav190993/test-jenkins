@@ -29,6 +29,14 @@ pipeline {
                 }
             }
         }
+        stage('Run as Cloud User') {
+            steps {
+                script {
+                    // Ensure sudo permissions are configured for `jenkins` to `clouduser`
+                    sh 'sudo -u cloud-user whoami'
+                }
+            }
+        }
         stage('check login user') {
             steps {
                 script {
