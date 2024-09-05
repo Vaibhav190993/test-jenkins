@@ -27,5 +27,15 @@ pipeline {
                 }
             }
         }
+        stage('check login user') {
+            steps {
+                script {
+                    // Use the 'ssh' command to connect and execute commands remotely
+                    sh """
+                        whoami
+                    """
+                }
+            }
+        }
     }
 }
