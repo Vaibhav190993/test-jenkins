@@ -12,7 +12,8 @@ pipeline {
             steps {
                 // Copy the file to the target directory
                 sh """
-                    /data/fo_installer/init_deployment.sh
+                cd /data/fo_installer/ &&
+                    ./init_deployment.sh
                 """
             }
         }
