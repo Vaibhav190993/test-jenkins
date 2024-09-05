@@ -7,12 +7,22 @@ pipeline {
     }
 
     stages {
+        stage('check user') {
+            steps {
+                script {
+                    // Use the 'ssh' command to connect and execute commands remotely
+                    sh """
+                        whoami
+                    """
+                }
+            }
+        }
         stage('SSH and Navigate') {
             steps {
                 script {
                     // Use the 'ssh' command to connect and execute commands remotely
                     sh """
-                        ssh cloud-user@${DEPLOYMENT_HOST} 'cd /data && ls -l'
+                        ssh -i /root/.ssh/id_rsa -o StrictHostKeyChecking=no cloud-user@${DEPLOYMENT_HOST} 'cd /data && ls -l'
                     """
                 }
             }
