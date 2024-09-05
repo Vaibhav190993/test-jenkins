@@ -12,7 +12,7 @@ pipeline {
                 script {
                     // Use the 'ssh' command to connect and execute commands remotely
                     sh """
-                        ssh -i /root/.ssh/id_rsa.pub -o StrictHostKeyChecking=no cloud-user@${DEPLOYMENT_HOST} 'cd /data && ls -l'
+                        ssh cloud-user@${DEPLOYMENT_HOST} 'cd /data && ls -l'
                     """
                 }
             }
