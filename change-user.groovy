@@ -8,11 +8,11 @@ pipeline {
     }
 
     stages {
-        stage('Copy Configuration File') {
+        stage('Initialize FlowOne Fulfillment deployment') {
             steps {
                 // Copy the file to the target directory
                 sh """
-                    ssh cloud-user@${DEPLOYMENT_HOST} cp /data/all-envs-and-hosts.yml /data/fo_installer/inventory/yaml/all-envs-and-hosts.yml
+                    ssh cloud-user@${DEPLOYMENT_HOST} init_deployment.sh
                 """
             }
         }
