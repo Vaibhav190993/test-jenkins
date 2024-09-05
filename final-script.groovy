@@ -9,54 +9,52 @@ pipeline {
     }
 
     stages {
-        stage('check user') {
+        stage('check user locally') {
             steps {
                 script {
-                    // Use the 'ssh' command to connect and execute commands remotely
-                    sh """
-                        whoami
-                    """
+                    // Check the current user locally (on Jenkins)
+                    sh "whoami"
                 }
             }
         }
+
         stage('SSH and Navigate') {
             steps {
                 script {
-                    // Use the 'ssh' command to connect and execute commands remotely
+                    // Use SSH to connect as cloud-user to the remote server
                     sh """
                         ssh cloud-user@${DEPLOYMENT_HOST} 'cd /data && ls -l'
                     """
                 }
             }
         }
-        stage('Run as Cloud User') {
+
+        stage('Check user remotely') {
             steps {
                 script {
-                    // Ensure sudo permissions are configured for `jenkins` to `clouduser`
-                    sh 'sudo -u cloud-user whoami'
-                }
-            }
-        }
-        stage('check login user') {
-            steps {
-                script {
-                    // Use the 'ssh' command to connect and execute commands remotely
+                    // Use SSH to connect as cloud-user and check the user on the remote server
                     sh """
-                        whoami
+                        ssh cloud-user@${DEPLOYMENT_HOST} 'whoami'
                     """
                 }
             }
         }
-        stage('Untar File') {
+
+        stage('Untar File on Remote') {
             steps {
-                // Run the tar command directly
-                sh "tar -xvf ${TAR_FILE} -C /data/"
+                // Use SSH to untar the file on the remote server
+                sh """
+                    ssh cloud-user@${DEPLOYMENT_HOST} 'tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}'
+                """
             }
         }
-        stage('After Untar File check') {
+
+        stage('After Untar File Check on Remote') {
             steps {
-                // Run the tar command directly
-                sh "ls -ld /data/fo_installer"
+                // Check the result of the untar operation on the remote server
+                sh """
+                    ssh cloud-user@${DEPLOYMENT_HOST} 'ls -ld ${UNTAR_DIR}/fo_installer'
+                """
             }
         }
     }
