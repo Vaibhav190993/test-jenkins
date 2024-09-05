@@ -22,7 +22,7 @@ pipeline {
                 // Move the tar file and change to the 'fo_installer' directory
                 sh """
                     ssh cloud-user@${DEPLOYMENT_HOST} '
-                    mv ${TAR_FILE} ${UNTAR_DIR}/fo_installer &&
+                    mv *.tar fo_installer &&
                     cd ${UNTAR_DIR}/fo_installer
                     '
                 """
