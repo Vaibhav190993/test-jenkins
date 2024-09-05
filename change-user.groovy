@@ -1,12 +1,19 @@
 pipeline {
     agent any
+
+    environment {
+        DEPLOYMENT_HOST = '10.92.131.112'  // Remote server IP
+        CONFIG_FILE = "/data/configurations.json"  // Path to the configuration file
+        TARGET_DIR = "/data/fo_installer"  // Target directory for moving the file
+    }
+
     stages {
-        stage('Run as Cloud User') {
+        stage('Copy Configuration File') {
             steps {
-                script {
-                    // Ensure sudo permissions are configured for `jenkins` to `clouduser`
-                    sh 'sudo -u cloud-user whoami'
-                }
+                // Copy the configuration file to the target directory
+                sh """
+                    scp cloud-user@${DEPLOYMENT_HOST}:${CONFIG_FILE} cloud-user@${DEPLOYMENT_HOST}:${TARGET_DIR}
+                """
             }
         }
     }
