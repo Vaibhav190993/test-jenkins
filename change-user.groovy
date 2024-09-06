@@ -2,23 +2,22 @@ pipeline {
     agent any
 
     environment {
-        SOURCE_FILE = ""  // Path to the source file
-        TARGET_FILE = "" // Target path for the copied file
         DEPLOYMENT_HOST = '10.91.45.198'  // Remote server IP
     }
 
     stages {
-        stage('Initialize FlowOne Fulfillment deployment') {
+        stage('SSH into Remote Server') {
             steps {
-                // Copy the file to the target directory
+                // SSH into the remote server and echo the hostname
                 sh """
-                ssh cloud-user@${DEPLOYMENT_HOST}
+                ssh cloud-user@${DEPLOYMENT_HOST} 'echo Connected to remote server: $(hostname)'
                 """
             }
         }
-        stage('Initialize FlowOne Fulfillment deployment') {
+
+        stage('Verify User on Remote Server') {
             steps {
-                // Copy the file to the target directory
+                // Verify the user running commands on the remote server
                 sh """
                 whoami
                 """
