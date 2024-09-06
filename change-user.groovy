@@ -54,15 +54,6 @@ pipeline {
             }
         }
 
-        stage('Initialize Deployment') {  // Renamed this stage
-            steps {
-                // Initialize the deployment
-                sh """
-                    /data/fo_installer/init_deployment.sh
-                """
-            }
-        }
-
         stage('Change Directory and Check') {
             steps {
                 // Change to the target directory and list its contents
