@@ -10,7 +10,7 @@ pipeline {
             steps {
                 // SSH into the remote server and echo the hostname
                 sh """
-                ssh cloud-user@${DEPLOYMENT_HOST} 'echo Connected to remote server: $(hostname)'
+                ssh cloud-user@${DEPLOYMENT_HOST} 'hostname'
                 """
             }
         }
