@@ -8,9 +8,9 @@ pipeline {
     stages {
         stage('SSH into Remote Server') {
             steps {
-                // SSH into the remote server and echo the hostname
+                // SSH into the remote server
                 sh """
-                ssh cloud-user@${DEPLOYMENT_HOST} 'hostname'
+                ssh cloud-user@${DEPLOYMENT_HOST}
                 """
             }
         }
