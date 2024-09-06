@@ -54,7 +54,7 @@ pipeline {
             }
         }
 
-        stage('Initialize FlowOne Fulfillment deployment') {
+        stage('Initialize Deployment') {  // Renamed this stage
             steps {
                 // Initialize the deployment
                 sh """
@@ -73,7 +73,7 @@ pipeline {
             }
         }
 
-        stage('Initialize FlowOne Fulfillment deployment') {
+        stage('Run Deployment Script') {  // Renamed this stage
             steps {
                 // Run the init_deployment.sh script
                 sh """
