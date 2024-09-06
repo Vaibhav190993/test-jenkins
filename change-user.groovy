@@ -10,7 +10,7 @@ pipeline {
             steps {
                 // SSH into the remote server
                 sh """
-                su - cloud-user
+                ssh cloud-user@${DEPLOYMENT_HOST}
                 """
             }
         }
