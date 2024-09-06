@@ -4,7 +4,7 @@ pipeline {
     environment {
         SOURCE_FILE = ""  // Path to the source file
         TARGET_FILE = "" // Target path for the copied file
-        DEPLOYMENT_HOST = '10.92.131.112'  // Remote server IP
+        DEPLOYMENT_HOST = '10.91.45.198'  // Remote server IP
     }
 
     stages {
@@ -12,8 +12,15 @@ pipeline {
             steps {
                 // Copy the file to the target directory
                 sh """
-                cd /data/fo_installer/ &&
-                    ./init_deployment.sh
+                ssh cloud-user@${DEPLOYMENT_HOST}
+                """
+            }
+        }
+        stage('Initialize FlowOne Fulfillment deployment') {
+            steps {
+                // Copy the file to the target directory
+                sh """
+                whoami
                 """
             }
         }
