@@ -2,29 +2,19 @@ pipeline {
     agent any
 
     environment {
-        TAR_FILE = "fo_installer-RHEL8.6_23.0.0_FP_03_635338.tar"   // Path to the tar.gz file within the workspace
-        DEST_DIR = "/home/ec2-user"     // Directory to extract the contents
+        DEPLOYMENT_HOST = '10.92.131.112'  // Remote server IP
     }
 
     stages {
-        stage('Checkout') {
+        stage('Run Deployment Script') {  // Renamed this stage
             steps {
-                git branch: 'main', url: 'https://github.com/Vaibhav190993/test-jenkins.git'
+                // Run the init_deployment.sh script
+                sh """
+                    cd /data/fo_installer/ &&
+                    chmod +x init_deployment.sh &&
+                    ./install-fo-infrastructure.sh
+                """
             }
-        }
-        stage('Untar File') {
-            steps {
-                // Run the tar command directly
-                sh "mkdir -p ${DEST_DIR} && tar -xvf ${TAR_FILE} -C ${DEST_DIR}"
-            }
-        }
-
-    }
-
-    post {
-        always {
-            // Clean up or perform any actions after the pipeline run
-            echo 'Pipeline finished.'
         }
     }
 }
