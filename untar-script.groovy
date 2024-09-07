@@ -11,7 +11,7 @@ pipeline {
                 // Run the init_deployment.sh script
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x init_deployment.sh &&
+                    chmod +x install-fo-infrastructure.sh &&
                     ./install-fo-infrastructure.sh
                 """
             }
