@@ -6,13 +6,13 @@ pipeline {
     }
 
     stages {
-        stage('Run Deployment Script') {  // Renamed this stage
+        stage('Run infrastructure Script') {  // Renamed this stage
             steps {
                 // Run the init_deployment.sh script
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x install-fo-infrastructure.sh &&
-                    ./install-fo-infrastructure.sh
+                    chmod +x install-fo-components-om.sh &&
+                    ./install-fo-components-om.sh
                 """
             }
         }
