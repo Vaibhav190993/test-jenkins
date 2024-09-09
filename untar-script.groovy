@@ -11,8 +11,8 @@ pipeline {
                 // Run the init_deployment.sh script
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x install-fo-components-wso2.sh &&
-                    ./install-fo-components-wso2.sh
+                    chmod +x install-fo-components-flowoneapi.sh &&
+                    ./install-fo-components-flowoneapi.sh
                 """
             }
         }
