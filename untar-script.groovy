@@ -53,15 +53,6 @@ pipeline {
                 """
             }
         }
-        
-        stage('Initialize FlowOne Fulfillment deployment') {
-            steps {
-                // Run the init_deployment.sh script
-                sh """
-                    /data/fo_installer/init_deployment.sh
-                """
-            }
-        }
 
         stage('Change Directory and Check') {
             steps {
