@@ -69,6 +69,7 @@ pipeline {
                 // Run the init_deployment.sh script again
                 sh """
                     cd /data/fo_installer/ &&
+                    chmod +x init_deployment.sh &&
                     ./init_deployment.sh
                 """
             }
