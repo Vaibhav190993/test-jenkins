@@ -13,7 +13,7 @@ pipeline {
             steps {
                 // Use SSH to untar the file on the remote server
                 sh """
-                    tar -xvf ${TAR_FILE} ${UNTAR_DIR}
+                    tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}
                 """
             }
         }
