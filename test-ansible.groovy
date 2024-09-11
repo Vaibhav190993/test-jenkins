@@ -2,34 +2,73 @@ pipeline {
     agent any
 
     environment {
-        TAR_FILE = "" // Path to the tar.gz file within the workspace
-        DEST_DIR = "" // Directory to extract the contents
+        DEPLOYMENT_HOST = '10.92.131.112'  // Remote server IP
     }
 
     stages {
-        stage('Ansible Script: Add User to Sudoers') {
+        stage('Untar File on Remote') {
             steps {
-                // Run the Ansible command to add cloud-user to sudoers with sudo privileges
-                sh '''
-                sudo ansible demo -m lineinfile -a "path=/etc/sudoers line='cloud-user ALL=(ALL) ALL' insertafter='^root'"
-                '''
+                // Use SSH to untar the file on the remote server
+                sh """
+                    'tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}'
+                """
             }
         }
 
-        stage('Ansible Script: Check Security Settings') {
+        stage('Create Target Directory') {
             steps {
-                // Run the Ansible command to set SELinux to disabled with sudo privileges
-                sh '''
-                sudo ansible demo -m lineinfile -a "path=/etc/selinux/config regexp='^SELINUX=' line='SELINUX=disabled'"
-                '''
+                // Create the target directory if it doesn't exist
+                sh """
+                    'mkdir -p ${TARGET_DIR}'
+                """
             }
         }
-    }
 
-    post {
-        always {
-            // Clean up or perform any actions after the pipeline run
-            echo 'Pipeline finished.'
+        stage('Move Tar Files') {
+            steps {
+                // Move the tar file to the target directory
+                sh """
+                    'mv /data/*.tar ${TARGET_DIR}'
+                """
+            }
+        }
+
+        stage('Copy Configuration File') {
+            steps {
+                // Copy the configuration file to the target directory locally
+                sh """
+                    cp /data/configurations.json /data/fo_installer
+                """
+            }
+        }
+        stage('Copy Yaml File') {
+            steps {
+                // Copy the file to the target directory
+                sh """
+                    cp /data/all-envs-and-hosts.yml /data/fo_installer/inventory/yaml/all-envs-and-hosts.yml
+                """
+            }
+        }
+
+        stage('Change Directory and Check') {
+            steps {
+                // Change to the target directory and list its contents
+                sh """
+                    '
+                    cd ${TARGET_DIR} &&
+                    ls -l
+                    '
+                """
+            }
+        }
+        stage('Initialize FlowOne Fulfillment deployment') {
+            steps {
+                // Copy the file to the target directory
+                sh """
+                cd /data/fo_installer/ &&
+                    ./init_deployment.sh
+                """
+            }
         }
     }
 }
