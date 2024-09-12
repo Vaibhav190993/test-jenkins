@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         DEPLOYMENT_HOST = '10.91.45.198'  // Remote server IP
-        // def TAR_FILE =/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar  // Path to the tar file on the remote server
-        // def UNTAR_DIR=/data
-        // def TARGET_DIR=${UNTAR_DIR}/fo_installer
+        TAR_FILE = '/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar'  // Path to the tar file on the remote server
+        UNTAR_DIR = '/data'
+        TARGET_DIR = "${UNTAR_DIR}/fo_installer"
     }
 
     stages {
@@ -13,10 +13,8 @@ pipeline {
             steps {
                 // Use SSH to untar the file on the remote server
                 sh """
-                    def TAR_FILE =/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar &&
-                    def UNTAR_DIR=/data &&
-                    def TARGET_DIR=${UNTAR_DIR}/fo_installer &&
-                    'tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}'
+                    cd /data &&
+                    tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}
                 """
             }
         }
@@ -25,7 +23,7 @@ pipeline {
             steps {
                 // Create the target directory if it doesn't exist
                 sh """
-                    'mkdir -p ${TARGET_DIR}'
+                    mkdir -p ${TARGET_DIR}
                 """
             }
         }
@@ -34,7 +32,7 @@ pipeline {
             steps {
                 // Move the tar file to the target directory
                 sh """
-                    'mv /data/*.tar ${TARGET_DIR}'
+                    mv /data/*.tar ${TARGET_DIR}
                 """
             }
         }
@@ -43,15 +41,16 @@ pipeline {
             steps {
                 // Copy the configuration file to the target directory locally
                 sh """
-                    cp /data/configurations.json /data/fo_installer
+                    cp /data/configurations.json ${TARGET_DIR}
                 """
             }
         }
+
         stage('Copy Yaml File') {
             steps {
                 // Copy the file to the target directory
                 sh """
-                    cp /data/all-envs-and-hosts.yml /data/fo_installer/inventory/yaml/all-envs-and-hosts.yml
+                    cp /data/all-envs-and-hosts.yml ${TARGET_DIR}/inventory/yaml/all-envs-and-hosts.yml
                 """
             }
         }
@@ -60,19 +59,18 @@ pipeline {
             steps {
                 // Change to the target directory and list its contents
                 sh """
-                    '
                     cd ${TARGET_DIR} &&
                     ls -l
-                    '
                 """
             }
         }
+
         stage('Initialize FlowOne Fulfillment deployment') {
             steps {
-                // Copy the file to the target directory
+                // Run the deployment script
                 sh """
-                cd /data/fo_installer/ &&
-                chmod +x init_deployment.sh &&
+                    cd /data/fo_installer/ &&
+                    chmod +x init_deployment.sh &&
                     ./init_deployment.sh
                 """
             }
