@@ -10,9 +10,7 @@ pipeline {
             steps {
                 // Run the install-fo-components-om.sh script
                 sh """
-                    cd /data/fo_installer/ &&
-                    chmod +x install-fo-components-om.sh &&
-                    ./install-fo-components-om.sh
+                whoami
                 """
             }
         }
