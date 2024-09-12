@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         DEPLOYMENT_HOST = '10.91.45.198'  // Remote server IP
-        def TAR_FILE =/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar  // Path to the tar file on the remote server
-        def UNTAR_DIR=/data
-        def TARGET_DIR=${UNTAR_DIR}/fo_installer
+        // def TAR_FILE =/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar  // Path to the tar file on the remote server
+        // def UNTAR_DIR=/data
+        // def TARGET_DIR=${UNTAR_DIR}/fo_installer
     }
 
     stages {
@@ -13,8 +13,9 @@ pipeline {
             steps {
                 // Use SSH to untar the file on the remote server
                 sh """
-                    
-                    cd /data &&
+                    def TAR_FILE =/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar &&
+                    def UNTAR_DIR=/data &&
+                    def TARGET_DIR=${UNTAR_DIR}/fo_installer &&
                     'tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}'
                 """
             }
