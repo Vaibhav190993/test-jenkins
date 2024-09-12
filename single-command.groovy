@@ -11,8 +11,8 @@ pipeline {
                 // Run the install-fo-infrastructure.sh script
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x install-fo-components-catalog.sh &&
-                    ./install-fo-components-catalog.sh
+                    chmod +x install-fo-components-flowoneapi.sh &&
+                    ./install-fo-components-flowoneapi.sh
                 """
             }
         }
