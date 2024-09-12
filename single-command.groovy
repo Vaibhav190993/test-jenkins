@@ -11,8 +11,8 @@ pipeline {
                 // Run the install-fo-infrastructure.sh script
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x install-fo-components-wso2.sh &&
-                    ./install-fo-components-wso2.sh
+                    chmod +x install-fo-infrastructure.sh &&
+                    ./install-fo-infrastructure.sh
                 """
             }
         }
