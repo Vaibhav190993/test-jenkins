@@ -69,6 +69,7 @@ pipeline {
                 // Copy the file to the target directory
                 sh """
                 cd /data/fo_installer/ &&
+                chmod +x init_deployment.sh &&
                     ./init_deployment.sh
                 """
             }
