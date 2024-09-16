@@ -8,11 +8,11 @@ pipeline {
     stages {
         stage('Run Deployment Script') {  // Renamed this stage
             steps {
-                // Run the install-fo-infrastructure.sh script
+                // Run the install-fo-components-om.sh script
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x install-fo-infrastructure.sh &&
-                    ./install-fo-infrastructure.sh
+                    chmod +x install-fo-components-om.sh &&
+                    ./install-fo-components-om.sh
                 """
             }
         }
