@@ -11,8 +11,8 @@ pipeline {
                 // Run the install-fo-components-om.sh script
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x install-fo-components-om.sh &&
-                    ./install-fo-components-om.sh
+                    chmod +x install-fo-components-catalog.sh &&
+                    ./install-fo-components-catalog.sh
                 """
             }
         }
