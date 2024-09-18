@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DEPLOYMENT_HOST = '10.91.45.198'  // Remote server IP
-        TAR_FILE = "/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar"  // Path to the tar file on the remote server
+        DEPLOYMENT_HOST = '10.91.45.198'  // Remote server IP (optional now since SSH is removed)
+        TAR_FILE = "/data/fo_installer-centos8.6_23.0.0_FP_03_638238.tar"  // Path to the tar file
         UNTAR_DIR = "/data"  // Directory where the tar file will be extracted
         TARGET_DIR = "${UNTAR_DIR}/fo_installer"  // Target directory for moving the tar file
     }
@@ -24,7 +24,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Untar File on Remote' }
             }
             steps {
-                // Use SSH to untar the file on the remote server
+                // Untar the file locally
                 sh """
                     tar -xvf ${TAR_FILE} -C ${UNTAR_DIR}
                 """
@@ -36,7 +36,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Create Target Directory' }
             }
             steps {
-                // Create the target directory if it doesn't exist
+                // Create the target directory if it doesn't exist locally
                 sh """
                     mkdir -p ${TARGET_DIR}
                 """
@@ -48,7 +48,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Move Tar Files' }
             }
             steps {
-                // Move the tar file to the target directory
+                // Move the tar file to the target directory locally
                 sh """
                     mv /data/*.tar ${TARGET_DIR}
                 """
@@ -60,9 +60,9 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Copy Configuration File' }
             }
             steps {
-                // Copy the configuration file to the target directory locally
+                // Copy the configuration file locally
                 sh """
-                    cp /data/configurations.json /data/fo_installer
+                    cp /data/configurations.json ${TARGET_DIR}
                 """
             }
         }
@@ -72,23 +72,9 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Copy Yaml File' }
             }
             steps {
-                // Copy the file to the target directory
+                // Copy the YAML file locally
                 sh """
-                    cp /data/all-envs-and-hosts.yml /data/fo_installer/inventory/yaml/all-envs-and-hosts.yml
-                """
-            }
-        }
-
-        stage('Initialize FlowOne Fulfillment deployment') {
-            when {
-                expression { return params.STAGE_TO_RUN == 'Initialize FlowOne Fulfillment deployment' }
-            }
-            steps {
-                // Run the initialization script
-                sh """
-                    cd /data/fo_installer/ &&
-                    chmod +x install-fo-infrastructure.sh &&
-                    /data/fo_installer/init_deployment.sh
+                    cp /data/all-envs-and-hosts.yml ${TARGET_DIR}/inventory/yaml/all-envs-and-hosts.yml
                 """
             }
         }
@@ -98,10 +84,24 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Change Directory and Check' }
             }
             steps {
-                // Change to the target directory and list its contents
+                // Change to the target directory and list its contents locally
                 sh """
                     cd ${TARGET_DIR} &&
                     ls -l
+                """
+            }
+        }
+
+        stage('Initialize FlowOne Fulfillment deployment') {
+            when {
+                expression { return params.STAGE_TO_RUN == 'Initialize FlowOne Fulfillment deployment' }
+            }
+            steps {
+                // Run the initialization script locally
+                sh """
+                    cd /data/fo_installer/ &&
+                    chmod +x install-fo-infrastructure.sh &&
+                    /data/fo_installer/init_deployment.sh
                 """
             }
         }
@@ -111,7 +111,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Run infrastructure Script' }
             }
             steps {
-                // Run the fo-infrastructure.sh script
+                // Run the fo-infrastructure.sh script locally
                 sh """
                     cd /data/fo_installer/ &&
                     chmod +x install-fo-infrastructure.sh &&
@@ -125,7 +125,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Run Fo Components Script' }
             }
             steps {
-                // Run the fo-components-om script
+                // Run the fo-components-om script locally
                 sh """
                     cd /data/fo_installer/ &&
                     chmod +x install-fo-components-om.sh &&
@@ -139,7 +139,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Run Fo Components Catalog Script' }
             }
             steps {
-                // Run the fo-components-catalog script
+                // Run the fo-components-catalog script locally
                 sh """
                     cd /data/fo_installer/ &&
                     chmod +x install-fo-components-catalog.sh &&
@@ -153,7 +153,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Run Fo Components flowoneapi Script' }
             }
             steps {
-                // Run the fo-components-flowoneapi script
+                // Run the fo-components-flowoneapi script locally
                 sh """
                     cd /data/fo_installer/ &&
                     chmod +x install-fo-components-flowoneapi.sh &&
@@ -167,7 +167,7 @@ pipeline {
                 expression { return params.STAGE_TO_RUN == 'Run Fo Components wso2 Script' }
             }
             steps {
-                // Run the fo-components-wso2 script
+                // Run the fo-components-wso2 script locally
                 sh """
                     cd /data/fo_installer/ &&
                     chmod +x install-fo-components-wso2.sh &&
