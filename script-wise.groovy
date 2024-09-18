@@ -100,8 +100,8 @@ pipeline {
                 // Run the initialization script locally
                 sh """
                     cd /data/fo_installer/ &&
-                    chmod +x install-fo-infrastructure.sh &&
-                    /data/fo_installer/init_deployment.sh
+                    chmod +x init_deployment.sh &&
+                    ./init_deployment.sh
                 """
             }
         }
