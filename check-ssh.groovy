@@ -86,6 +86,8 @@ pipeline {
             steps {
                 // Run the initialization script
                 sh """
+                    cd /data/fo_installer/ &&
+                    chmod +x install-fo-infrastructure.sh &&
                     /data/fo_installer/init_deployment.sh
                 """
             }
